@@ -46,12 +46,22 @@ module.exports = async (req, res) => {
       return res.status(404).json({ error: 'User has no registered FCM token' });
     }
 
-    // 2. إرسال الإشعار الخارجي الرسمي عبر خوادم Google FCM
+  // 2. إرسال الإشعار الخارجي الرسمي عبر خوادم Google FCM بأولوية قصوى
     const message = {
       token: fcmToken,
       notification: {
         title: title,
         body: body
+      },
+      android: {
+        priority: 'high',
+        notification: {
+          sound: 'default',
+          channelId: '2v_channel_urgent', // ربطه بالقناة العاجلة في تطبيقك
+          priority: 'max',
+          defaultSound: true,
+          defaultVibrateTimings: true
+        }
       },
       data: {
         click_action: 'FLUTTER_NOTIFICATION_CLICK',
